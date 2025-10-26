@@ -25,15 +25,16 @@ class Home extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(21.0),
           child: SingleChildScrollView(
+            physics: const NeverScrollableScrollPhysics(),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                Stack(
+                  alignment: AlignmentGeometry.center,
                   children: [
                     // Using AnimatedSlide for "Ripples" Text Animation
-                    AnimatedSlide(
-                      offset: diceClicked.value ? Offset(1.2, 0) : Offset(0, 0),
+                    AnimatedAlign(
+                      alignment: diceClicked.value ? Alignment.center : Alignment.centerLeft,
                       duration: const Duration(milliseconds: 555),
                       curve: Curves.linearToEaseOut,
                       child: AnimatedOpacity(
@@ -61,20 +62,23 @@ class Home extends StatelessWidget {
                         ),
                       ),
                     ),
-                    GestureDetector(
-                      // onTap: () => menuClicked.value = !menuClicked.value,
-                      onTap: () => animatedMenuIconAnimationController.triggerMenuClick(),
-                      child: AnimatedOpacity(
-                        duration: const Duration(milliseconds: 555),
-                        curve: Curves.linearToEaseOut,
-                        opacity: diceClicked.value ? 1 : 0,
-                        child: AnimatedIcon(
-                          icon: AnimatedIcons.menu_close,
-                          size: size.width * .075,
-                          color: Colors.black,
-                          progress:
-                          animatedMenuIconAnimationController
-                              .controller.value),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: GestureDetector(
+                        // onTap: () => menuClicked.value = !menuClicked.value,
+                        onTap: () => animatedMenuIconAnimationController.triggerMenuClick(),
+                        child: AnimatedOpacity(
+                          duration: const Duration(milliseconds: 555),
+                          curve: Curves.linearToEaseOut,
+                          opacity: diceClicked.value ? 1 : 0,
+                          child: AnimatedIcon(
+                            icon: AnimatedIcons.menu_close,
+                            size: size.width * .075,
+                            color: Colors.black,
+                            progress:
+                            animatedMenuIconAnimationController
+                                .controller.value),
+                        ),
                       ),
                     ),
                   ],
