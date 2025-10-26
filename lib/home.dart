@@ -51,12 +51,28 @@ class Home extends StatelessWidget {
                             initAnim.value = true;
                           });
                           },
-                          child: Text(
-                            "Ripples",
-                            style: TextStyle(
-                              fontSize: size.width * .075,
-                              fontWeight: FontWeight.w900,
-                              color: Colors.black,
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 2555),
+                            curve: diceClicked.value ? Curves.fastEaseInToSlowEaseOut : Curves.fastLinearToSlowEaseIn,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              // vertical: 0,
+                            ),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              color: diceClicked.value ? Colors.grey[300] : Colors.white,
+                              border: diceClicked.value ? Border.all(
+                                color: Colors.black54,
+                                width: 3,
+                              ) : null,
+                            ),
+                            child: Text(
+                              "Ripples",
+                              style: TextStyle(
+                                fontSize: size.width * .075,
+                                fontWeight: FontWeight.w900,
+                                color: Colors.black,
+                              ),
                             ),
                           ),
                         ),

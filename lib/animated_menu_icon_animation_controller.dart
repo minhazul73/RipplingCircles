@@ -17,6 +17,12 @@ class AnimatedMenuIconAnimationController extends GetxController with GetSingleT
     );
   }
 
+  @override
+  void onClose() {
+    _controller.dispose();
+    super.onClose();
+  }
+
   triggerMenuClick() {
     isPlaying.value = !isPlaying.value;
     if(!isPlaying.value) {
