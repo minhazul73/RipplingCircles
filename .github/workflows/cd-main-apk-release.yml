@@ -1,0 +1,73 @@
+name: CD (Main) - Release APK
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release-apk:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Analyze
+        run: flutter analyze
+
+      - name: Read version from pubspec.yaml
+        shell: bash
+        run: |
+          set -euo pipefail
+          VERSION_LINE=$(grep -E '^version:\s*' pubspec.yaml | head -n 1)
+          VERSION_RAW=${VERSION_LINE#version: }
+          VERSION_RAW=$(echo "$VERSION_RAW" | tr -d '\r')
+          echo "VERSION_RAW=$VERSION_RAW" >> "$GITHUB_ENV"
+          echo "VERSION_TAG=$VERSION_RAW" >> "$GITHUB_ENV"
+
+      - name: Build release APK
+        run: flutter build apk --release
+
+      - name: Prepare APK artifact name
+        shell: bash
+        run: |
+          set -euo pipefail
+          APK_PATH="build/app/outputs/flutter-apk/app-release.apk"
+          OUT="Rippling Circles v${VERSION_RAW}.apk"
+
+          if [ ! -f "$APK_PATH" ]; then
+            echo "Expected APK not found at $APK_PATH" >&2
+            exit 1
+          fi
+
+          cp "$APK_PATH" "$OUT"
+          echo "APK_OUT=$OUT" >> "$GITHUB_ENV"
+
+      - name: Create or update GitHub Release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: "v${{ env.VERSION_TAG }}"
+          name: "Rippling Circles v${{ env.VERSION_RAW }}"
+          artifacts: "${{ env.APK_OUT }}"
+          allowUpdates: true
+          replacesArtifacts: true

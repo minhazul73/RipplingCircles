@@ -9,11 +9,10 @@ class AnimatedMenuIconAnimationController extends GetxController with GetSingleT
 
   @override
   void onInit() {
-    // TODO: implement onInit
     super.onInit();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 500), // Control animation speed
+      duration: const Duration(milliseconds: 500),
     );
   }
 
@@ -23,7 +22,7 @@ class AnimatedMenuIconAnimationController extends GetxController with GetSingleT
     super.onClose();
   }
 
-  triggerMenuClick() {
+  void triggerMenuClick() {
     isPlaying.value = !isPlaying.value;
     if(!isPlaying.value) {
       _controller.reverse();
@@ -33,7 +32,7 @@ class AnimatedMenuIconAnimationController extends GetxController with GetSingleT
     }
   }
 
-  resetToMenu() {
+  void resetToMenu() {
     isPlaying.value = false;
     _controller.reset();
   }
