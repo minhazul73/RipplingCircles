@@ -7,7 +7,7 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var size = Get.size;
+    final size = MediaQuery.sizeOf(context);
     var appBarHeight = AppBar().preferredSize.height;
     AnimatedMenuIconAnimationController animatedMenuIconAnimationController =
         Get.put(AnimatedMenuIconAnimationController());
